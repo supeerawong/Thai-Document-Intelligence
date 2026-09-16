@@ -17,6 +17,9 @@ def test_health_and_discovery() -> None:
     with TestClient(app) as client:
         assert client.get("/health/live").json() == {"status": "ok"}
         assert client.get("/v1/schemas").json()[0]["name"] == "thai_official_letter"
+        capabilities = client.get("/v1/capabilities").json()
+        assert capabilities["configured_ocr"] == "tesseract"
+        assert capabilities["ocr_preprocessing"] is True
         assert client.get("/openapi.json").json()["info"]["version"] == __version__
 
 

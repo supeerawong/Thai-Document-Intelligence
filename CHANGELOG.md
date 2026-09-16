@@ -4,6 +4,13 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-16
+
+- Add an optional local PaddleOCR provider and provider selection for CLI/API.
+- Add shared image preprocessing and hybrid mixed-page PDF extraction.
+- Add reproducible CER/WER benchmark reports through `thaidoc benchmark`.
+- Add a validated manual JSON correction workflow to the web result screen.
+
 ## [0.1.1] - 2026-09-16
 
 ### Fixed
@@ -21,6 +28,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Ionic Angular web demo, TypeScript SDK, Docker Compose, OpenAPI snapshot, migration, CI, tests, and contributor documentation.
 - SVG and PNG brand assets for Thai Document Intelligence.
 
-[Unreleased]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/supeerawong/Thai-Document-Intelligence/releases/tag/v0.1.0

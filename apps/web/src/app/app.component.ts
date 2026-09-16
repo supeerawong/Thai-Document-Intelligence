@@ -6,7 +6,10 @@ import {
   IonContent, IonHeader, IonIcon, IonProgressBar, IonSpinner, IonTitle, IonToolbar
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { cloudUploadOutline, documentTextOutline, downloadOutline } from 'ionicons/icons';
+import {
+  checkmarkOutline, closeOutline, cloudUploadOutline, createOutline,
+  documentTextOutline, downloadOutline
+} from 'ionicons/icons';
 
 interface ExtractionJob {
   id: string;
@@ -33,9 +36,15 @@ export class AppComponent {
   readonly loading = signal(false);
   readonly progress = signal(0);
   readonly jobStatus = signal('');
+  readonly editing = signal(false);
+  readonly correctionDraft = signal('');
+  readonly correctionError = signal('');
 
   constructor() {
-    addIcons({ cloudUploadOutline, documentTextOutline, downloadOutline });
+    addIcons({
+      checkmarkOutline, closeOutline, cloudUploadOutline, createOutline,
+      documentTextOutline, downloadOutline
+    });
   }
 
   choose(event: Event): void {
@@ -43,6 +52,7 @@ export class AppComponent {
     this.file.set(input.files?.[0] ?? null);
     this.result.set(null);
     this.error.set('');
+    this.editing.set(false);
   }
 
   extract(): void {
@@ -102,5 +112,34 @@ export class AppComponent {
     link.download = 'thaidoc-result.json';
     link.click();
     URL.revokeObjectURL(link.href);
+  }
+
+  startCorrection(): void {
+    this.correctionDraft.set(JSON.stringify(this.result(), null, 2));
+    this.correctionError.set('');
+    this.editing.set(true);
+  }
+
+  updateDraft(event: Event): void {
+    this.correctionDraft.set((event.target as HTMLTextAreaElement).value);
+  }
+
+  applyCorrection(): void {
+    try {
+      const corrected = JSON.parse(this.correctionDraft()) as unknown;
+      if (typeof corrected !== 'object' || corrected === null || Array.isArray(corrected)) {
+        throw new Error('The result must be a JSON object.');
+      }
+      this.result.set(corrected);
+      this.correctionError.set('');
+      this.editing.set(false);
+    } catch (error) {
+      this.correctionError.set(error instanceof Error ? error.message : 'Invalid JSON');
+    }
+  }
+
+  cancelCorrection(): void {
+    this.correctionError.set('');
+    this.editing.set(false);
   }
 }

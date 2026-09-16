@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from PIL import Image
 
 
+@runtime_checkable
 class OCRProvider(Protocol):
     name: str
 

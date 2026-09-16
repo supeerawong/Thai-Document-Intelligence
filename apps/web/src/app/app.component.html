@@ -1,7 +1,7 @@
 <ion-header translucent="true">
   <ion-toolbar>
     <ion-title>Thai Document Intelligence</ion-title>
-    <ion-badge slot="end" color="warning">v0.1</ion-badge>
+    <ion-badge slot="end" color="warning">v0.2</ion-badge>
   </ion-toolbar>
 </ion-header>
 
@@ -40,12 +40,37 @@
       <ion-card class="result-card">
         <ion-card-header>
           <ion-card-title>Result</ion-card-title>
-          <ion-button *ngIf="result()" fill="clear" size="small" (click)="download()">
-            <ion-icon slot="start" name="download-outline"></ion-icon>JSON
-          </ion-button>
+          <div class="result-actions" *ngIf="result()">
+            <ion-button *ngIf="!editing()" fill="clear" size="small" (click)="startCorrection()">
+              <ion-icon slot="start" name="create-outline"></ion-icon>Correct
+            </ion-button>
+            <ion-button fill="clear" size="small" (click)="download()">
+              <ion-icon slot="start" name="download-outline"></ion-icon>JSON
+            </ion-button>
+          </div>
         </ion-card-header>
         <ion-card-content>
-          <pre *ngIf="result(); else empty">{{ result() | json }}</pre>
+          <div *ngIf="editing(); else resultPreview" class="correction-editor">
+            <p>แก้ไขค่าที่ OCR อ่านผิด แล้วตรวจสอบ JSON ก่อนนำไปใช้งาน</p>
+            <textarea
+              aria-label="Correct extracted JSON"
+              spellcheck="false"
+              [value]="correctionDraft()"
+              (input)="updateDraft($event)"
+            ></textarea>
+            <p class="error" *ngIf="correctionError()">{{ correctionError() }}</p>
+            <div class="correction-actions">
+              <ion-button size="small" (click)="applyCorrection()">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>Apply correction
+              </ion-button>
+              <ion-button size="small" fill="outline" color="medium" (click)="cancelCorrection()">
+                <ion-icon slot="start" name="close-outline"></ion-icon>Cancel
+              </ion-button>
+            </div>
+          </div>
+          <ng-template #resultPreview>
+            <pre *ngIf="result(); else empty">{{ result() | json }}</pre>
+          </ng-template>
           <ng-template #empty><div class="empty">Extracted fields and provenance will appear here.</div></ng-template>
         </ion-card-content>
       </ion-card>

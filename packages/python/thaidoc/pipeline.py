@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from thaidoc.extractors import extract_official_letter
 from thaidoc.loaders import load_document
 from thaidoc.models import DocumentSource, ExtractionMode, ExtractionOptions, ExtractionResult
-from thaidoc.ocr import OCRProvider
+from thaidoc.ocr import ImagePreprocessingOptions, OCRProvider
 from thaidoc.providers import StructuredExtractionProvider
 from thaidoc.schemas import ThaiOfficialLetter
 
@@ -19,9 +19,10 @@ def extract(
     mode: str = "auto",
     provider: StructuredExtractionProvider | None = None,
     ocr: OCRProvider | None = None,
+    preprocessing: ImagePreprocessingOptions | None = None,
 ) -> ExtractionResult[Any]:
     options = ExtractionOptions(mode=cast(ExtractionMode, mode))
-    document = load_document(source, ocr=ocr, language=options.language)
+    document = load_document(source, ocr=ocr, language=options.language, preprocessing=preprocessing)
     if schema is not ThaiOfficialLetter:
         raise ValueError(f"Unsupported schema: {schema.__name__}")
     result = extract_official_letter(document)

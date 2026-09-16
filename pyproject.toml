@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "thaidoc"
-version = "0.1.1"
+version = "0.2.0"
 description = "Extract structured, verifiable data from Thai documents"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -31,13 +31,18 @@ api = [
   "alembic>=1.14,<2",
 ]
 ai = ["httpx>=0.28,<1"]
+paddle = [
+  "numpy>=1.26,<3",
+  "paddleocr>=3,<4",
+  "paddlepaddle>=3,<4",
+]
 dev = [
   "pytest>=8.3,<9",
   "pytest-cov>=6,<7",
   "ruff>=0.9,<1",
   "mypy>=1.14,<2",
 ]
-all = ["thaidoc[api,ai,dev]"]
+all = ["thaidoc[api,ai,dev,paddle]"]
 
 [project.scripts]
 thaidoc = "thaidoc.cli.app:app"
@@ -68,5 +73,5 @@ plugins = ["pydantic.mypy"]
 strict = true
 
 [[tool.mypy.overrides]]
-module = ["pymupdf", "pytesseract"]
+module = ["pymupdf", "pytesseract", "numpy", "paddleocr"]
 ignore_missing_imports = true

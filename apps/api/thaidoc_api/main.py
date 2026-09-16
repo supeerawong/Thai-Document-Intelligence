@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from starlette.responses import Response
 from thaidoc import __version__
+from thaidoc.ocr import available_ocr_providers
 
 from thaidoc_api.db import (
     ExtractionJobRecord,
@@ -203,7 +204,9 @@ def list_schemas() -> list[dict[str, str]]:
 def capabilities() -> dict[str, Any]:
     return {
         "formats": ["application/pdf", "image/png", "image/jpeg"],
-        "ocr": ["tesseract"],
+        "ocr": available_ocr_providers(),
+        "configured_ocr": settings.ocr_provider,
+        "ocr_preprocessing": settings.ocr_preprocess,
         "ai_providers": ["openai-compatible"] if settings.ai_base_url and settings.ai_model else [],
         "limits": {"max_bytes": settings.max_upload_bytes, "max_pages": settings.max_pages},
     }

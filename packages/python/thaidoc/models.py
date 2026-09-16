@@ -40,7 +40,8 @@ class ExtractionOptions(BaseModel):
 class PageContent(BaseModel):
     page: int
     text: str
-    method: Literal["digital_text", "ocr"]
+    method: Literal["digital_text", "ocr", "hybrid"]
+    ocr_provider: str | None = None
     width: float | None = None
     height: float | None = None
 

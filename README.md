@@ -5,7 +5,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
   <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-4338CA">
-  <img alt="Version 0.1.1" src="https://img.shields.io/badge/version-0.1.1-F59E0B">
+  <img alt="Version 0.2.0" src="https://img.shields.io/badge/version-0.2.0-F59E0B">
 </p>
 
 Thai Document Intelligence (`thaidoc`) is an offline-first Python library and self-hosted service that turns Thai PDF and image documents into typed JSON. It understands Thai digits, Buddhist Era dates, OCR noise, and official-document fields. Every important field includes confidence and source provenance.
@@ -66,6 +66,8 @@ print(result.model_dump_json(indent=2))
 ```bash
 thaidoc extract document.pdf --schema thai_official_letter
 thaidoc extract document.pdf --mode auto --output result.json
+thaidoc extract document.pdf --ocr-provider paddle
+thaidoc benchmark benchmarks/manifest.jsonl --output reports/ocr.md
 thaidoc serve
 ```
 
@@ -75,11 +77,15 @@ thaidoc serve
 |---|---:|---|
 | Digital PDF | Yes | PyMuPDF text extraction |
 | Scanned PDF | Yes | Tesseract `tha+eng` |
-| Mixed PDF | Yes | Per-page text/OCR detection |
+| Mixed PDF | Yes | Per-page digital, OCR, or hybrid extraction |
 | PNG / JPEG | Yes | Tesseract `tha+eng` |
 | DOCX | Planned | v0.4 |
 
 The initial `thai_official_letter` schema covers external letters, internal memoranda, orders, and announcements. Missing values remain `null`; the extractor never invents a value.
+
+### OCR quality options
+
+Tesseract remains the default local OCR engine. Install `thaidoc[paddle]` to opt into PaddleOCR, then select it with `--ocr-provider paddle` or `THAIDOC_OCR_PROVIDER=paddle`. Images are conservatively upscaled, converted to grayscale, and contrast-normalized before OCR. The web result view supports local JSON correction before download. See [OCR quality and benchmarking](docs/ocr-quality.md).
 
 ### Optional AI provider
 

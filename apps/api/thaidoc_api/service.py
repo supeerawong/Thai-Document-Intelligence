@@ -8,6 +8,7 @@ from typing import Any
 import pymupdf
 from sqlalchemy import select
 from thaidoc import extract
+from thaidoc.ocr import ImagePreprocessingOptions, create_ocr_provider
 from thaidoc.providers import OpenAICompatibleProvider
 from thaidoc.schemas import ThaiOfficialLetter
 
@@ -127,6 +128,8 @@ def process_job(job_id: str) -> dict[str, Any]:
             schema=ThaiOfficialLetter,
             mode=mode,
             provider=provider,
+            ocr=create_ocr_provider(settings.ocr_provider),
+            preprocessing=ImagePreprocessingOptions(enabled=settings.ocr_preprocess),
         )
         payload = result.model_dump(mode="json")
         with session_scope() as session:

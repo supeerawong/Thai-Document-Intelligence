@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -20,6 +21,8 @@ class Settings(BaseSettings):
     ai_model: str | None = None
     ai_api_key: str | None = None
     ai_timeout_seconds: float = Field(default=60, gt=0)
+    ocr_provider: Literal["tesseract", "paddle"] = "tesseract"
+    ocr_preprocess: bool = True
 
 
 settings = Settings()

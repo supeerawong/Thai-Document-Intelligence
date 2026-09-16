@@ -4,7 +4,7 @@ The running service exposes authoritative OpenAPI documentation at `/docs` and `
 
 ## Create an extraction
 
-`POST /v1/extractions` accepts multipart fields `file`, `schema`, `mode`, and `execution`. `Idempotency-Key` is optional. The only v0.1 schema is `thai_official_letter`.
+`POST /v1/extractions` accepts multipart fields `file`, `schema`, `mode`, and `execution`. `Idempotency-Key` is optional. The initial schema is `thai_official_letter`.
 
 - `execution=auto`: synchronous at or below five pages and 10 MiB, otherwise asynchronous.
 - `execution=sync`: returns the extraction as `200`; exceeding the threshold returns `422 sync_limit_exceeded`.
@@ -25,3 +25,4 @@ The running service exposes authoritative OpenAPI documentation at `/docs` and `
 
 Errors use `application/problem+json` with `type`, `title`, `status`, `code`, `detail`, `request_id`, and `errors`.
 
+`GET /v1/capabilities` also reports installed OCR providers, the configured provider, and whether image preprocessing is enabled.
