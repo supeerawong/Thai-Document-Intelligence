@@ -56,6 +56,9 @@ def test_internal_memo_separates_contact_and_ignores_parenthetical_body_text() -
 (นายสมชาย ใจดี)
 นักวิชาการคอมพิวเตอร์ปฏิบัติการ
 (นางสาวสมหญิง ใจงาม)
+นักวิชาการคอมพิวเตอร์ชำนาญการพิเศษ รักษาการในตำแหน่ง
+นักวิชาการคอมพิวเตอร์เชี่ยวชาญ
+(นายสมหมาย ใจมั่น)
 ผู้อำนวยการสำนักทดสอบ"""
     loaded = LoadedDocument(
         filename="internal-memo.pdf",
@@ -72,4 +75,9 @@ def test_internal_memo_separates_contact_and_ignores_parenthetical_body_text() -
     assert [signer.name for signer in result.document.signers] == [
         "นายสมชาย ใจดี",
         "นางสาวสมหญิง ใจงาม",
+        "นายสมหมาย ใจมั่น",
     ]
+    assert result.document.signers[1].position == (
+        "นักวิชาการคอมพิวเตอร์ชำนาญการพิเศษ รักษาการในตำแหน่ง "
+        "นักวิชาการคอมพิวเตอร์เชี่ยวชาญ"
+    )

@@ -14,6 +14,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy import select
 from starlette.responses import Response
+from thaidoc import __version__
 
 from thaidoc_api.db import (
     ExtractionJobRecord,
@@ -47,7 +48,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(
     title="Thai Document Intelligence API",
-    version="0.1.0",
+    version=__version__,
     description="Extract structured, verifiable data from Thai documents.",
     lifespan=lifespan,
 )

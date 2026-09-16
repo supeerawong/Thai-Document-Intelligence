@@ -57,17 +57,41 @@ def _first_group(patterns: Iterable[str], text: str) -> str | None:
     return None
 
 
+def _signer_name(line: str) -> str | None:
+    match = re.fullmatch(r"\(([^()\n]{2,100})\)", line.strip())
+    if not match:
+        return None
+    name = match.group(1).strip()
+    if len(name.split()) < 2 or any(character.isdigit() for character in name) or ":" in name:
+        return None
+    return name
+
+
 def _extract_signers(text: str) -> list[Signer]:
-    """Return signature blocks, excluding ordinary parenthetical body text."""
-    matches = re.findall(r"\(([^()\n]{2,100})\)\s*\n([^\n]{2,150})", text)
-    return [
-        Signer(name=name.strip(), position=position.strip())
-        for name, position in matches
-        if len(name.split()) >= 2
-        and not any(character.isdigit() for character in name)
-        and ":" not in name
-        and position.strip().startswith(SIGNER_POSITION_PREFIXES)
-    ]
+    """Return signature blocks, including positions that wrap across lines."""
+    lines = text.splitlines()
+    signers: list[Signer] = []
+    for index, line in enumerate(lines):
+        name = _signer_name(line)
+        if not name:
+            continue
+
+        position_lines: list[str] = []
+        for following_line in lines[index + 1 :]:
+            candidate = following_line.strip()
+            if not candidate:
+                continue
+            if _signer_name(candidate):
+                break
+            if not candidate.startswith(SIGNER_POSITION_PREFIXES):
+                break
+            position_lines.append(candidate)
+            if len(position_lines) == 3:
+                break
+
+        if position_lines:
+            signers.append(Signer(name=name, position=" ".join(position_lines)))
+    return signers
 
 
 def extract_official_letter(document: LoadedDocument) -> ExtractionResult[ThaiOfficialLetter]:

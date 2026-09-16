@@ -3,7 +3,7 @@
   "info": {
     "title": "Thai Document Intelligence API",
     "description": "Extract structured, verifiable data from Thai documents.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "paths": {
     "/v1/extractions": {

@@ -5,7 +5,7 @@
 <p align="center">
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
   <img alt="Python 3.11+" src="https://img.shields.io/badge/python-3.11%2B-4338CA">
-  <img alt="Version 0.1" src="https://img.shields.io/badge/version-0.1-F59E0B">
+  <img alt="Version 0.1.1" src="https://img.shields.io/badge/version-0.1.1-F59E0B">
 </p>
 
 Thai Document Intelligence (`thaidoc`) is an offline-first Python library and self-hosted service that turns Thai PDF and image documents into typed JSON. It understands Thai digits, Buddhist Era dates, OCR noise, and official-document fields. Every important field includes confidence and source provenance.

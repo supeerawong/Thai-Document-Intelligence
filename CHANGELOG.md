@@ -4,9 +4,12 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-16
+
 ### Fixed
 
 - Separate agency contact details and ignore non-signature parenthetical text when extracting internal memoranda.
+- Preserve signer positions that wrap across multiple lines in official documents.
 
 ## [0.1.0] - 2026-09-16
 
@@ -18,5 +21,6 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Ionic Angular web demo, TypeScript SDK, Docker Compose, OpenAPI snapshot, migration, CI, tests, and contributor documentation.
 - SVG and PNG brand assets for Thai Document Intelligence.
 
-[Unreleased]: https://github.com/OWNER/thai-document-intelligence/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/OWNER/thai-document-intelligence/releases/tag/v0.1.0
+[Unreleased]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/supeerawong/Thai-Document-Intelligence/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/supeerawong/Thai-Document-Intelligence/releases/tag/v0.1.0

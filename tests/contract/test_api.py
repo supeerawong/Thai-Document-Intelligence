@@ -1,5 +1,6 @@
 import fitz
 from fastapi.testclient import TestClient
+from thaidoc import __version__
 from thaidoc_api.main import app
 
 
@@ -16,6 +17,7 @@ def test_health_and_discovery() -> None:
     with TestClient(app) as client:
         assert client.get("/health/live").json() == {"status": "ok"}
         assert client.get("/v1/schemas").json()[0]["name"] == "thai_official_letter"
+        assert client.get("/openapi.json").json()["info"]["version"] == __version__
 
 
 def test_sync_extraction_contract() -> None:
