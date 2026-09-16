@@ -38,7 +38,7 @@ Thai Document Intelligence (`thaidoc`) is an offline-first Python library and se
 ## Quick start / เริ่มใช้งาน
 
 ```bash
-git clone https://github.com/<owner>/thai-document-intelligence
+git clone https://github.com/supeerawong/Thai-Document-Intelligence.git
 cd thai-document-intelligence
 docker compose up --build
 ```
