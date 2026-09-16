@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+### Fixed
+
+- Separate agency contact details and ignore non-signature parenthetical text when extracting internal memoranda.
+
 ## [0.1.0] - 2026-09-16
 
 ### Added

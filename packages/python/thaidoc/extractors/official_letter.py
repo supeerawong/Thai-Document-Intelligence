@@ -9,6 +9,19 @@ from thaidoc.models import ExtractedField, ExtractionResult, FieldProvenance, Lo
 from thaidoc.normalize import parse_thai_date
 from thaidoc.schemas import Signer, ThaiOfficialLetter
 
+SIGNER_POSITION_PREFIXES = (
+    "ผู้อำนวยการ",
+    "รองผู้อำนวยการ",
+    "นักวิชาการ",
+    "เจ้าพนักงาน",
+    "เลขาธิการ",
+    "อัยการ",
+    "ประธาน",
+    "กรรมการ",
+    "หัวหน้า",
+    "ผู้จัดการ",
+)
+
 
 def _match(pattern: str, text: str, *, flags: int = re.MULTILINE) -> re.Match[str] | None:
     return re.search(pattern, text, flags)
@@ -44,6 +57,19 @@ def _first_group(patterns: Iterable[str], text: str) -> str | None:
     return None
 
 
+def _extract_signers(text: str) -> list[Signer]:
+    """Return signature blocks, excluding ordinary parenthetical body text."""
+    matches = re.findall(r"\(([^()\n]{2,100})\)\s*\n([^\n]{2,150})", text)
+    return [
+        Signer(name=name.strip(), position=position.strip())
+        for name, position in matches
+        if len(name.split()) >= 2
+        and not any(character.isdigit() for character in name)
+        and ":" not in name
+        and position.strip().startswith(SIGNER_POSITION_PREFIXES)
+    ]
+
+
 def extract_official_letter(document: LoadedDocument) -> ExtractionResult[ThaiOfficialLetter]:
     text = "\n".join(page.text for page in document.pages)
     document_type = classify_official_document(text)
@@ -52,6 +78,9 @@ def extract_official_letter(document: LoadedDocument) -> ExtractionResult[ThaiOf
         [r"^ส่วนราชการ\s+(.+)$", r"^([ก-๙A-Za-z].*(?:กระทรวง|กรม|สำนักงาน|มหาวิทยาลัย).*)$"],
         text,
     )
+    contact = _first_group([r"^.*?((?:โทรศัพท์|โทร\.|อีเมล|E-mail)\s*.+)$"], text)
+    if agency and contact and contact in agency:
+        agency = agency[: agency.index(contact)].strip()
     number = _first_group([r"^(?:ที่)\s+([^\n]+)$"], text)
     date_text = _first_group(
         [
@@ -63,10 +92,7 @@ def extract_official_letter(document: LoadedDocument) -> ExtractionResult[ThaiOf
     recipient = _first_group([r"^เรียน\s+(.+)$"], text)
     reference = _first_group([r"^อ้างถึง\s+(.+)$"], text)
     attachment = _first_group([r"^สิ่งที่ส่งมาด้วย\s+(.+)$"], text)
-    contact = _first_group([r"^(.+(?:โทรศัพท์|โทร\.|อีเมล|E-mail).+)$"], text)
-
-    signer_matches = re.findall(r"\(([^()\n]{2,100})\)\s*\n([^\n]{2,150})", text)
-    signers = [Signer(name=name.strip(), position=position.strip()) for name, position in signer_matches]
+    signers = _extract_signers(text)
 
     body_start = None
     if recipient:
