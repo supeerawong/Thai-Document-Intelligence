@@ -1,0 +1,12 @@
+{
+  "name": "@thaidoc/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript client for Thai Document Intelligence",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": { "build": "tsc -p tsconfig.json" },
+  "devDependencies": { "typescript": "6.0.2" }
+}
+

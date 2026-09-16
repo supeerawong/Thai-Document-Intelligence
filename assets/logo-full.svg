@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 160" role="img" aria-labelledby="title desc">
+  <title id="title">Thai Document Intelligence logo</title>
+  <desc id="desc">A folded document containing the Thai letter ko kai and three connected data points.</desc>
+  <rect x="8" y="8" width="144" height="144" rx="32" fill="#4338CA"/>
+  <path d="M43 28h55l27 27v77H43z" fill="#F8FAFC"/>
+  <path d="M98 28l27 27H98z" fill="#FCD34D"/>
+  <text x="60" y="101" font-family="Tahoma, sans-serif" font-size="62" font-weight="700" fill="#0F172A">ก</text>
+  <path d="M54 117h34" stroke="#F59E0B" stroke-width="3"/>
+  <circle cx="54" cy="117" r="5" fill="#F59E0B"/><circle cx="71" cy="117" r="5" fill="#F59E0B"/><circle cx="88" cy="117" r="5" fill="#F59E0B"/>
+  <text x="180" y="73" font-family="Inter, Arial, sans-serif" font-size="45" font-weight="750" letter-spacing="-1.5" fill="#0F172A">Thai Document</text>
+  <text x="180" y="122" font-family="Inter, Arial, sans-serif" font-size="45" font-weight="750" letter-spacing="-1.5" fill="#4338CA">Intelligence</text>
+</svg>
+

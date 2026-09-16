@@ -1,0 +1,14 @@
+name: Feature request
+description: Propose a focused capability
+title: "[Feature]: "
+labels: ["type:feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes: { label: Problem, description: What user problem should this solve? }
+    validations: { required: true }
+  - type: textarea
+    id: outcome
+    attributes: { label: Acceptance outcome, description: Describe observable success, not implementation only. }
+    validations: { required: true }
+

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Thai Document Intelligence</title>
+  <rect width="128" height="128" rx="28" fill="#4338CA"/>
+  <path d="M31 18h47l20 20v72H31z" fill="#F8FAFC"/>
+  <path d="M78 18l20 20H78z" fill="#FCD34D"/>
+  <text x="47" y="80" font-family="Tahoma, sans-serif" font-size="52" font-weight="700" fill="#0F172A">ก</text>
+  <path d="M38 98h28" stroke="#F59E0B" stroke-width="2"/>
+  <circle cx="38" cy="98" r="4" fill="#F59E0B"/><circle cx="52" cy="98" r="4" fill="#F59E0B"/><circle cx="66" cy="98" r="4" fill="#F59E0B"/>
+</svg>
+

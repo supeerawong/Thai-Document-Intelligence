@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    command: uvicorn thaidoc_api.main:app --host 0.0.0.0 --port 8000
+    environment:
+      THAIDOC_DATABASE_URL: sqlite:////data/thaidoc.db
+      THAIDOC_ARTIFACT_DIR: /artifacts
+      THAIDOC_REDIS_URL: redis://redis:6379/0
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - thaidoc-data:/data
+      - thaidoc-artifacts:/artifacts
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: .
+      dockerfile: infra/docker/api.Dockerfile
+    command: arq thaidoc_worker.main.WorkerSettings
+    environment:
+      THAIDOC_DATABASE_URL: sqlite:////data/thaidoc.db
+      THAIDOC_ARTIFACT_DIR: /artifacts
+      THAIDOC_REDIS_URL: redis://redis:6379/0
+    volumes:
+      - thaidoc-data:/data
+      - thaidoc-artifacts:/artifacts
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: infra/docker/web.Dockerfile
+    ports:
+      - "127.0.0.1:3000:80"
+    depends_on:
+      - api
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  thaidoc-data:
+  thaidoc-artifacts:
+

@@ -1,0 +1,54 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-title>Thai Document Intelligence</ion-title>
+    <ion-badge slot="end" color="warning">v0.1</ion-badge>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true">
+  <main class="shell">
+    <section class="hero">
+      <img src="/assets/logo-icon.svg" alt="TDI logo" />
+      <div>
+        <p class="eyebrow">OFFLINE-FIRST • VERIFIABLE</p>
+        <h1>Thai documents,<br /><span>structured with evidence.</span></h1>
+        <p>แปลงเอกสารภาษาไทยเป็นข้อมูลที่ตรวจสอบย้อนกลับได้ โดยไม่ต้องส่งข้อมูลขึ้น cloud</p>
+      </div>
+    </section>
+
+    <div class="grid">
+      <ion-card class="upload-card">
+        <ion-card-header><ion-card-title>Extract a document</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <label class="drop-zone">
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            <strong>{{ file()?.name || 'Choose PDF, PNG or JPEG' }}</strong>
+            <span>สูงสุด 50 MiB / 200 หน้า</span>
+            <input type="file" accept="application/pdf,image/png,image/jpeg" (change)="choose($event)" />
+          </label>
+          <ion-button expand="block" [disabled]="!file() || loading()" (click)="extract()">
+            <ion-spinner *ngIf="loading()" name="crescent"></ion-spinner>
+            <ion-icon *ngIf="!loading()" slot="start" name="document-text-outline"></ion-icon>
+            {{ loading() ? 'Processing…' : 'Extract structured data' }}
+          </ion-button>
+          <ion-progress-bar *ngIf="loading()" [type]="jobStatus() ? 'determinate' : 'indeterminate'" [value]="progress()"></ion-progress-bar>
+          <p class="status" *ngIf="jobStatus()">{{ jobStatus() }} · {{ progress() * 100 }}%</p>
+          <p class="error" *ngIf="error()">{{ error() }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="result-card">
+        <ion-card-header>
+          <ion-card-title>Result</ion-card-title>
+          <ion-button *ngIf="result()" fill="clear" size="small" (click)="download()">
+            <ion-icon slot="start" name="download-outline"></ion-icon>JSON
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content>
+          <pre *ngIf="result(); else empty">{{ result() | json }}</pre>
+          <ng-template #empty><div class="empty">Extracted fields and provenance will appear here.</div></ng-template>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </main>
+</ion-content>

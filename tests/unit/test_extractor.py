@@ -1,0 +1,41 @@
+from thaidoc.extractors import extract_official_letter
+from thaidoc.models import LoadedDocument, PageContent
+
+TEXT = """สำนักงานทดสอบ
+ที่ อส 0000/1234
+16 กันยายน 2569
+เรื่อง ขอเชิญประชุม
+เรียน ผู้อำนวยการสำนักทดสอบ
+อ้างถึง หนังสือเลขที่ 1
+สิ่งที่ส่งมาด้วย กำหนดการประชุม
+จึงเรียนมาเพื่อโปรดพิจารณา
+(สมชาย ใจดี)
+ผู้อำนวยการสำนักงานทดสอบ
+โทรศัพท์ 02-000-0000"""
+
+
+def test_extract_official_letter_with_provenance() -> None:
+    loaded = LoadedDocument(
+        filename="sample.pdf",
+        mime_type="application/pdf",
+        sha256="0" * 64,
+        pages=[PageContent(page=1, text=TEXT, method="digital_text")],
+    )
+    result = extract_official_letter(loaded)
+    assert result.document.document_type == "external_letter"
+    assert result.document.subject == "ขอเชิญประชุม"
+    assert result.document.date and result.document.date.iso == "2026-09-16"
+    assert result.fields["subject"].provenance[0].page == 1
+    assert result.document.signers[0].name == "สมชาย ใจดี"
+
+
+def test_missing_fields_are_null_and_warned() -> None:
+    loaded = LoadedDocument(
+        filename="empty.pdf",
+        mime_type="application/pdf",
+        sha256="0" * 64,
+        pages=[PageContent(page=1, text="ข้อความทั่วไป", method="digital_text")],
+    )
+    result = extract_official_letter(loaded)
+    assert result.document.subject is None
+    assert "Could not extract subject" in result.warnings

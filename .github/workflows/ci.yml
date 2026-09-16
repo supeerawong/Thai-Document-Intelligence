@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with: { python-version: "3.12", enable-cache: true }
+      - run: uv sync --all-extras
+      - run: uv run ruff check .
+      - run: uv run mypy packages/python apps/api apps/worker
+      - run: uv run pytest --cov=thaidoc --cov=thaidoc_api
+      - run: uvx pip-audit
+  typescript:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [apps/web, packages/typescript-sdk]
+    defaults:
+      run: { working-directory: "${{ matrix.directory }}" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24", cache: npm, cache-dependency-path: "${{ matrix.directory }}/package-lock.json" }
+      - run: npm ci
+      - run: npm run build
+      - run: npm audit --omit=dev
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build
